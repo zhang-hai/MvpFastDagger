@@ -1,0 +1,12 @@
+apply plugin: 'java-library'
+apply plugin: 'com.github.dcendents.android-maven' // ADD THIS
+group='com.github.zhang-hai'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':fastdagger')
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"
