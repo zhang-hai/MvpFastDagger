@@ -1,0 +1,2 @@
+# MvpFastDagger
+MVP+Dagger+Annotation项目架构快速生成Module和Component类
