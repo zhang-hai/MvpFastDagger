@@ -39,5 +39,8 @@ dependencies {
     implementation project(':fastdagger')
     annotationProcessor project(':fastdaggerprocessor')
 
+//    implementation 'com.github.zhang-hai:mvpfastdagger:1.0.0'
+//    annotationProcessor 'com.github.zhang-hai:mvpfastdagger:1.0.0'
+
     implementation 'org.androidannotations:androidannotations-api:4.4.0'
 }
