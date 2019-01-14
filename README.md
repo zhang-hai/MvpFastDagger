@@ -29,7 +29,7 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 
 	}
 
-`` 说明：IXXModel对应的实现类的命名规范为：XXModelImp(如IMainModel接口的实现类命名为MainModelImp）,否则在生成Module类时将找不到对应的实现类。 ``
+`` 说明：IXXModel接口对应的实现类的命名规范为：XXModelImp(如IMainModel接口的实现类命名为MainModelImp）,否则在生成Module类时将找不到对应的实现类。 ``
 
 ### 将MvpFastDagger引入到你的项目中 ###
 
