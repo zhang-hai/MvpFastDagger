@@ -25,7 +25,7 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes("org.harry.fastdagger.annotation.FastDagger")
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedOptions(value = {"fastDaggerIndex"})
 public class FastDaggerAnnotationProcessor extends AbstractProcessor {
     public static final String OPTION_FAST_DAGGER_INDEX = "fastDaggerIndex";
@@ -226,6 +226,9 @@ public class FastDaggerAnnotationProcessor extends AbstractProcessor {
      * @return 转换后的变量名字
      */
     private String changeClassNameToVar(String clsName){
+        if(clsName.length() == 1){
+            return clsName.toLowerCase();
+        }
         return String.format(Locale.CHINESE,"%s%s",clsName.substring(0,1).toLowerCase(),clsName.substring(1));
     }
 
