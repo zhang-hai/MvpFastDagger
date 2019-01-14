@@ -47,6 +47,17 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 
 2.在app项目的build.gradle文件中增加引用：
 
+	android {
+    	...
+		defaultConfig {
+        	javaCompileOptions{
+        	    annotationProcessorOptions{
+        	        arguments = ["fastDaggerIndex": "org.harry.fastdagger.demo"]//这里配置你的包名，生成的文件会在这个目录下面
+        	    }
+        	}
+    	}
+	}
+
 	dependencies {
 		...
 		
