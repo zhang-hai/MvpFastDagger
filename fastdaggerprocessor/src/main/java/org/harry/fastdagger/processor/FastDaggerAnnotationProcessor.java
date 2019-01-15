@@ -121,7 +121,7 @@ public class FastDaggerAnnotationProcessor extends AbstractProcessor {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            messager.printMessage(Diagnostic.Kind.ERROR,"generate module file error : " + e.getMessage());
+            messager.printMessage(Diagnostic.Kind.WARNING,"generate module file error : " + e.getMessage());
         }
         return moduleFileName;
     }
@@ -192,7 +192,7 @@ public class FastDaggerAnnotationProcessor extends AbstractProcessor {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            messager.printMessage(Diagnostic.Kind.ERROR,"generate component file error : " + e.getMessage());
+            messager.printMessage(Diagnostic.Kind.WARNING,"generate component file error : " + e.getMessage());
         }
     }
 
