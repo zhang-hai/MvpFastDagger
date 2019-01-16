@@ -15,8 +15,4 @@ public class MainModelImp extends BaseModel implements IMainModel {
 
     }
 
-    @Override
-    public void onDestroy() {
-
-    }
 }

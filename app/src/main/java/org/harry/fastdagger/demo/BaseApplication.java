@@ -11,7 +11,6 @@ import org.harry.fastdagger.demo.di.module.AppModule;
  * Created by zhanghai on 2019/1/11.
  * function：
  */
-//@MvpFastDagger(name = "login.login",presenterExtendCls = BasePresenter.class,activityExtendCls = AppCompatActivity.class)
 public class BaseApplication extends Application {
     private static BaseApplication mApplication;
     private AppComponent mAppComponent;

@@ -15,6 +15,7 @@ import org.harry.fastdagger.demo.mvp.model.IMainModel;
 import org.harry.fastdagger.demo.mvp.presenter.MainPresenter;
 import org.harry.fastdagger.demo.mvp.view.IMainView;
 
+
 @FastDagger(modelCls = IMainModel.class,
         viewCls = IMainView.class,
         activityCls = MainActivity.class,

@@ -45,4 +45,16 @@ public abstract class BasePresenter<M extends IModel, V extends IView> implement
      * @return
      */
     public abstract boolean useEventBus();
+
+//    public abstract byte getNextByte(int a);
+//
+//    public abstract String getNextString(String a,double b);
+//
+//    public abstract long getNextLong();
+//
+//    public abstract float getNextFloat();
+//
+//    public abstract double getNextDouble();
+//
+//    public abstract IModel getNextModel(IModel model);
 }

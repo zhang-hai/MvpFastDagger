@@ -1,1 +1,2 @@
 org.harry.fastdagger.processor.FastDaggerAnnotationProcessor
+org.harry.fastdagger.processor.MvpFastDaggerAnnotationProcessor

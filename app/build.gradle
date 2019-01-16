@@ -12,7 +12,8 @@ android {
 
         javaCompileOptions{
             annotationProcessorOptions{
-                arguments = ["fastDaggerIndex": "org.harry.fastdagger.demo"]
+                arguments = ["fastDaggerIndex": "org.harry.fastdagger.demo",
+                             "mvpsrc" : file("src/main/java").getAbsolutePath()]
             }
         }
     }
@@ -45,8 +46,8 @@ dependencies {
     implementation project(':fastdagger')
     annotationProcessor project(':fastdaggerprocessor')
 
-//    implementation 'com.github.zhang-hai:mvpfastdagger:1.0.0'
-//    annotationProcessor 'com.github.zhang-hai:mvpfastdagger:1.0.0'
+//    implementation 'com.github.zhang-hai:mvpfastdagger:1.0.1'
+//    annotationProcessor 'com.github.zhang-hai:mvpfastdagger:1.0.1'
 
     implementation 'org.androidannotations:androidannotations-api:4.4.0'
 }
