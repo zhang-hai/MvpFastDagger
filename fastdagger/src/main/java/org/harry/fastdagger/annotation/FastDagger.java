@@ -8,9 +8,11 @@ import java.lang.annotation.Target;
 /**
  * Created by harry on 2019/1/10.
  * function：快速生成Dagger中的Module文件和Component文件
+ * 仅生成module文件和component文件，现已废弃，不在使用
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
+@Deprecated
 public @interface FastDagger {
 
     //IModel接口类
