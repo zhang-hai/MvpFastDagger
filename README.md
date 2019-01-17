@@ -58,9 +58,8 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 		defaultConfig {
         	javaCompileOptions{
         	    annotationProcessorOptions{
-        	        arguments = ["fastDaggerIndex": "org.harry.fastdagger.demo",//这里配置你的包名，生成的文件会在这个目录下面
-								"mvpSrcDir" : file("src/main/java").getAbsolutePath() //主工程src路径，一般情况下该值不用修改
-								]
+					arguments = ["fastDaggerIndex": "org.harry.fastdagger.demo",//这里配置你的包名，生成的文件会在这个目录下面
+                             "mvpSrcDir" : file("src/main/java").getAbsolutePath()]//主工程src路径，一般情况下该值不用修改
         	    }
         	}
     	}
