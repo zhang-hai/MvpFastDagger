@@ -68,8 +68,8 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 	dependencies {
 		...
 		
-		implementation 'com.github.zhang-hai:mvpfastdagger:version'		//使用mvpfastdagger库
-    	annotationProcessor 'com.github.zhang-hai:mvpfastdagger:version'	//使用mvpfastdagger库中的注解处理器
+		implementation 'com.github.zhang-hai:mvpfastdagger:1.1.0'		//使用mvpfastdagger库
+    	annotationProcessor 'com.github.zhang-hai:mvpfastdagger:1.1.0'	//使用mvpfastdagger库中的注解处理器
 		
 	}
 
