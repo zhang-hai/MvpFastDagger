@@ -19,7 +19,7 @@ public @interface MvpFastDagger {
      * 分别存放在package .mvp下presenter model view目录
      * @return
      */
-    String name() default "";
+    String name();
 
     /**
      * 要生成的presenter类的父类

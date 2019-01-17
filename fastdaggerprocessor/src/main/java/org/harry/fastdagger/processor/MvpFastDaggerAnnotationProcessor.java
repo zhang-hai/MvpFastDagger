@@ -34,10 +34,10 @@ import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes("org.harry.fastdagger.annotation.MvpFastDagger")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-@SupportedOptions(value = {"fastDaggerIndex","mvpsrc"})
+@SupportedOptions(value = {"fastDaggerIndex","mvpSrcDir"})
 public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
     private static final String OPTION_FAST_DAGGER_INDEX = "fastDaggerIndex";
-    private static final String OPTION_MVP_SRC = "mvpsrc";
+    private static final String OPTION_MVP_SRC = "mvpSrcDir";
 
     private final String PACKAGE_FORMAT = "package %s;\n\n";
     private final String IMPORT_FORMAT = "import %s;\n";
@@ -64,12 +64,12 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
         String mvpsrc = processingEnv.getOptions().get(OPTION_MVP_SRC);
         if (index == null || index.isEmpty()) {
             messager.printMessage(Diagnostic.Kind.ERROR, "No option " + OPTION_FAST_DAGGER_INDEX +
-                    " passed to annotation processor.please config in app gradle file");
+                    " passed to annotation processor.Please config in app gradle file");
             return false;
         }
         if (mvpsrc == null || mvpsrc.isEmpty()) {
             messager.printMessage(Diagnostic.Kind.ERROR, "No option " + OPTION_MVP_SRC +
-                    " passed to annotation processor.please config in app gradle file");
+                    " passed to annotation processor.Please config in app gradle file");
             return false;
         }
         mOptionSrc = mvpsrc;
