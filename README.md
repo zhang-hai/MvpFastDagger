@@ -1,35 +1,41 @@
 # MvpFastDagger
-MVP+Dagger+Annotation项目架构快速生成Module和Component类。
+MVP+Dagger+Annotation项目架构快速生成mvp相应的文件。
 
-MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增XXPresenter、IXXview、IXXModel、XXModleImp、XXModule、XXComponent类，手动增加比较繁琐，若进行复制又容易出错，该库可以在有XXPresenter、IXXview、IXXModel、XXModleImp的基础上，通过编译器自动生成对应的XXModule、XXComponent类。
+MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增XXPresenter、IXXview、IXXModel、XXModleImp、XXModule、XXComponent类，手动增加比较繁琐，该库可以帮助我们快速生成mvp相应的文件。
 
 ``注:本开源库适用于MVP+Dagger+Annotation架构的项目。``
 
 ### MvpFastDagger使用仅需一步 ###
 
-@FastDagger不限定在哪个类中使用，建议：`` 建议统一使用在Activity类或Presenter类或Model类或view类中，方便管理及维护 ``
+使用该注解时，需要先创建Activity类，然后使用@MvpFastDagger。
 
 注解使用方式：
     
 	/**
-	* modelCls是创建好的IXXModel类，
-	* viewCls是创建好的IXXView类，
-	* activityCls是创建好的Activity类或Fragment类
-	* scopeCls对应的Imodel Iview的生命周期
+	* name 对应要创建的类的名字，如：IxxxPresenter,IxxxView,IxxxModel,xxxModelImp,xxxModule,xxxComponent,
+	* basePresenterClazz是需要创建的presenter类的父类，
+	* iBaseViewClazz是创建view类的父类，
+	* iBaseModelClazz是创建model接口类的父类，
+	* baseModelImpClazz是要生成的ModelImp的父类，
+	* scopeClazz对应的Imodel Iview的生命周期，
+	* modules对应Dagger中@Component注解中的modules字段，
 	* dependencies是对应@Component注解中的dependencies字段，该字段为可选填字段
 	*/
-	@FastDagger(modelCls = IMainModel.class,
-        viewCls = IMainView.class,
-        activityCls = MainActivity.class,
-        scopeCls = PerActivity.class,
-        dependencies = {AppComponent.class})
-	public class MainActivity extends AppCompatActivity implements IMainView {
+	@MvpFastDagger(name = "login",
+        basePresenterClazz = BasePresenter.class,
+        iBaseViewClazz = IViewAdvance.class,
+        iBaseModelClazz = IModel.class,
+        baseModelImpClazz = BaseModel.class,
+        scopeClazz = PerActivity.class,
+        modules = AppModule.class,
+        dependencies = AppComponent.class)
+	public class LoginActivity extends BaseActivity<LoginPresenter> implements ILoginView {
 		
 		...
 
 	}
 
-`` 说明：IXXModel接口对应的实现类的命名规范为：XXModelImp(如IMainModel接口的实现类命名为MainModelImp）,否则在生成Module类时将找不到对应的实现类。 ``
+
 
 ### 将MvpFastDagger引入到你的项目中 ###
 
@@ -52,7 +58,9 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 		defaultConfig {
         	javaCompileOptions{
         	    annotationProcessorOptions{
-        	        arguments = ["fastDaggerIndex": "org.harry.fastdagger.demo"]//这里配置你的包名，生成的文件会在这个目录下面
+        	        arguments = ["fastDaggerIndex": "org.harry.fastdagger.demo",//这里配置你的包名，生成的文件会在这个目录下面
+								"mvpSrcDir" : file("src/main/java").getAbsolutePath() //主工程src路径，一般情况下该值不用修改
+								]
         	    }
         	}
     	}
@@ -61,8 +69,8 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 	dependencies {
 		...
 		
-		implementation 'com.github.zhang-hai:mvpfastdagger:1.0.0'		//使用mvpfastdagger库
-    	annotationProcessor 'com.github.zhang-hai:mvpfastdagger:1.0.0'	//使用mvpfastdagger库中的注解处理器
+		implementation 'com.github.zhang-hai:mvpfastdagger:version'		//使用mvpfastdagger库
+    	annotationProcessor 'com.github.zhang-hai:mvpfastdagger:version'	//使用mvpfastdagger库中的注解处理器
 		
 	}
 
