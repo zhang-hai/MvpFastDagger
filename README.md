@@ -12,7 +12,7 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 注解使用方式：
     
 	/**
-	* name 对应要创建的类的名字，如：IxxxPresenter,IxxxView,IxxxModel,xxxModelImp,xxxModule,xxxComponent,
+	* name 对应要创建的类的名字
 	* basePresenterClazz是需要创建的presenter类的父类，
 	* iBaseViewClazz是创建view类的父类，
 	* iBaseModelClazz是创建model接口类的父类，
@@ -35,7 +35,7 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 
 	}
 
-
+> 其中name可以直接写名字，如："login",可以用"."进行分割，如：“login.login”,这时会生成login目录，该目录下再生成放对应的java文件。
 
 ### 将MvpFastDagger引入到你的项目中 ###
 
