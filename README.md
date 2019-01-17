@@ -3,7 +3,7 @@ MVP+Dagger+Annotation项目架构快速生成mvp相应的文件。
 
 MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增XXPresenter、IXXview、IXXModel、XXModleImp、XXModule、XXComponent类，手动增加比较繁琐，该库可以帮助我们快速生成mvp相应的文件。
 
-> 注:本开源库适用于MVP+Dagger+Annotation架构的项目。
+> 注:本开源库适用于MVP+Dagger+Annotation架构的项目。在项目中需要引入Dagger和Annotation这两个开源库。
 
 ### MvpFastDagger使用仅需一步 ###
 
