@@ -24,6 +24,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.MirroredTypesException;
@@ -142,9 +143,10 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
         if(strExtend != null){
             sb.append(String.format(Locale.CHINESE,IMPORT_FORMAT,strExtend));
         }
+
         //插入预留导入包位置
         sb.append(IMPORT_PRE_EMPTY).append("\n");
-        sb.append(String.format(Locale.CHINESE,CLASS_FORMAT,fileName,strExtend == null ? "" : "extends "+strExtend.substring(strExtend.lastIndexOf(".")+1),""))
+        sb.append(String.format(Locale.CHINESE,CLASS_FORMAT,fileName, strExtend == null ? "" : String.format(Locale.CHINESE,"extends %s<I%sModel,I%sView>",strExtend.substring(strExtend.lastIndexOf(".")+1),newName,newName),""))
                 .append("\n")
                 .append("\t@Inject\n")
                 .append(String.format(Locale.CHINESE,"\tpublic %s(I%sModel model,I%sView view){\n",fileName,newName,newName))

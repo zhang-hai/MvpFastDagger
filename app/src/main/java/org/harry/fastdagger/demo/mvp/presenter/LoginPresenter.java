@@ -5,7 +5,7 @@ import org.harry.fastdagger.demo.mvp.model.ILoginModel;
 import javax.inject.Inject;
 import org.harry.fastdagger.demo.base.BasePresenter;
 
-public class LoginPresenter extends BasePresenter {
+public class LoginPresenter extends BasePresenter<ILoginModel,ILoginView> {
 
 	@Inject
 	public LoginPresenter(ILoginModel model,ILoginView view){
