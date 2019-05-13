@@ -7,6 +7,10 @@ dependencies {
 
     implementation project(':fastdagger')
 }
+//解决控件台中文乱码问题
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
 
 sourceCompatibility = "8"
 targetCompatibility = "8"
