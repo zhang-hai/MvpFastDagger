@@ -70,13 +70,15 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 	dependencies {
 		...
 		
-		implementation 'com.github.zhang-hai:mvpfastdagger:1.2.0'		//使用mvpfastdagger库
-    	annotationProcessor 'com.github.zhang-hai:mvpfastdagger:1.2.0'	//使用mvpfastdagger库中的注解处理器
+		implementation 'com.github.zhang-hai.MvpFastDagger:fastdagger:1.2.1'		//使用mvpfastdagger库
+    	annotationProcessor 'com.github.zhang-hai.MvpFastDagger:fastdagger:1.2.1'	//使用mvpfastdagger库中的注解处理器
 		
 	}
 
 
 ### 版本更新记录 ###
+***V1.2.1***
+- 1.修复再次编译时，会删除已生成的kotlin文件
 
 ***V1.2.0***
 
