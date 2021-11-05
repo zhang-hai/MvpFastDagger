@@ -47,6 +47,8 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
 
     private final String CLASS_FORMAT = "public class %s %s %s{\n";
     private final String INTERFACE_FORMAT = "public interface %s %s{\n";
+
+
     //预留导入包的位置
     private final String IMPORT_PRE_EMPTY = "import empty\n";
 
@@ -146,19 +148,26 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
 
         //插入预留导入包位置
         sb.append(IMPORT_PRE_EMPTY).append("\n");
-        sb.append(String.format(Locale.CHINESE,CLASS_FORMAT,fileName, strExtend == null ? "" : String.format(Locale.CHINESE,"extends %s<I%sModel,I%sView>",strExtend.substring(strExtend.lastIndexOf(".")+1),newName,newName),""))
-                .append("\n")
-                .append("\t@Inject\n")
-                .append(String.format(Locale.CHINESE,"\tpublic %s(I%sModel model,I%sView view){\n",fileName,newName,newName))
-                .append(strExtend != null ? "\t\t super(model,view);\n" : "\t\t\n")
-                .append("\t}\n\n")
-                .append(achieveAbstractMethod(sb,typeMirror))
+        if (fastDagger.language() == MvpFastDagger.JAVA){
+            sb.append(String.format(Locale.CHINESE,CLASS_FORMAT,fileName, strExtend == null ? "" : String.format(Locale.CHINESE,"extends %s<I%sModel,I%sView>",strExtend.substring(strExtend.lastIndexOf(".")+1),newName,newName),""))
+                    .append("\n")
+                    .append("\t@Inject\n")
+                    .append(String.format(Locale.CHINESE,"\tpublic %s(I%sModel model,I%sView view){\n",fileName,newName,newName))
+                    .append(strExtend != null ? "\t\t super(model,view);\n" : "\t\t\n")
+                    .append("\t}\n\n");
+        }else if (fastDagger.language() == MvpFastDagger.KOTLIN){
+            sb.append(
+                    String.format(Locale.CHINESE,CLASS_FORMAT,fileName, strExtend == null ? "" :
+                            String.format(Locale.CHINESE,"@Inject constructor(model: I%sModel,view: I%sView): %s<I%sModel,I%sView>(model,view)",newName,newName,strExtend.substring(strExtend.lastIndexOf(".")+1),newName,newName),""))
+                    .append("\n");
+        }
+        sb.append(achieveAbstractMethod(sb,typeMirror,fastDagger.language()))
                 .append("}");
 
         //删除预留包位置
         sb.replace(sb.indexOf(IMPORT_PRE_EMPTY),sb.indexOf(IMPORT_PRE_EMPTY)+IMPORT_PRE_EMPTY.length(),"");
 
-        writeFileInSrc(fileFullName,sb.toString());
+        writeFileInSrc(fileFullName,sb.toString(),fastDagger.language());
     }
 
     //生成Iview接口
@@ -205,7 +214,12 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
         sb.append(String.format(Locale.CHINESE,PACKAGE_FORMAT,packageName));
         StringBuilder sbExtend = null;
         if(typeMirrors != null && typeMirrors.size() > 0){
-            sbExtend = new StringBuilder("extends ");
+            sbExtend = new StringBuilder();
+            if (fastDagger.language() == MvpFastDagger.KOTLIN){
+                sbExtend.append(": ");
+            }else {
+                sbExtend.append("extends ");
+            }
             int i = 0;
             for (TypeMirror typeMirror : typeMirrors){
                 sb.append(String.format(Locale.CHINESE,IMPORT_FORMAT,typeMirror.toString()));
@@ -227,7 +241,7 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
         //删除预留包位置
         sb.replace(sb.indexOf(IMPORT_PRE_EMPTY),sb.indexOf(IMPORT_PRE_EMPTY)+IMPORT_PRE_EMPTY.length(),"");
 
-        writeFileInSrc(fileFullName,sb.toString());
+        writeFileInSrc(fileFullName,sb.toString(),fastDagger.language());
     }
 
     //生成iModel接口实现类ModelImp类
@@ -268,19 +282,26 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
         //插入预留导入包位置
         sb.append(IMPORT_PRE_EMPTY).append("\n");
 
-        sb.append(String.format(Locale.CHINESE,CLASS_FORMAT,fileName,
-                (strExtend == null ? "" : String.format(Locale.CHINESE,"extends %s",strExtend.substring(strExtend.lastIndexOf(".")+1))),
-                " implements "+interfaceName))
-                .append("\n")
-                .append("\t@Inject\n")
-                .append(String.format(Locale.CHINESE,"\tpublic %s(){\n",fileName))
-                .append("\t}\n\n")
-                .append(achieveAbstractMethod(sb,typeMirror))
+        if (fastDagger.language() == MvpFastDagger.KOTLIN){
+            sb.append(String.format(Locale.CHINESE,CLASS_FORMAT,fileName + " @Inject constructor()",
+                    (strExtend == null ? "" : String.format(Locale.CHINESE," : %s()",strExtend.substring(strExtend.lastIndexOf(".")+1))),
+                    strExtend == null ? interfaceName : " , "+interfaceName))
+                    .append("\n");
+        }else {
+            sb.append(String.format(Locale.CHINESE,CLASS_FORMAT,fileName,
+                    (strExtend == null ? "" : String.format(Locale.CHINESE,"extends %s",strExtend.substring(strExtend.lastIndexOf(".")+1))),
+                    " implements "+interfaceName))
+                    .append("\n")
+                    .append("\t@Inject\n")
+                    .append(String.format(Locale.CHINESE,"\tpublic %s(){\n",fileName))
+                    .append("\t}\n\n");
+        }
+        sb.append(achieveAbstractMethod(sb,typeMirror,fastDagger.language()))
                 .append("}");
         //删除预留包位置
         sb.replace(sb.indexOf(IMPORT_PRE_EMPTY),sb.indexOf(IMPORT_PRE_EMPTY)+IMPORT_PRE_EMPTY.length(),"");
 
-        writeFileInSrc(fileFullName,sb.toString());
+        writeFileInSrc(fileFullName,sb.toString(),fastDagger.language());
     }
 
     //生成Activity或Fragment类
@@ -527,7 +548,21 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
      * @param content
      */
     private void writeFileInSrc(String fileName,String content){
+        writeFileInSrc(fileName, content,MvpFastDagger.JAVA);
+    }
+
+    /**
+     * 在src目录下生成java文件
+     * @param fileName
+     * @param content
+     */
+    private void writeFileInSrc(String fileName,String content,int language){
         String filePath = fileName.replace(".","/") + ".java";
+        //kotlin时
+        if (language == MvpFastDagger.KOTLIN){
+            content = content.replace(";","").replace("public ","").replace("java.lang.String","kotlin.String");
+            filePath = filePath.replace(".java",".kt");
+        }
         filePath = mOptionSrc + "/" + filePath;
         File file = new File(filePath);
         file.getParentFile().mkdirs();
@@ -577,7 +612,7 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
      * @param typeMirror
      * @return
      */
-    private String achieveAbstractMethod(StringBuilder parent,TypeMirror typeMirror){
+    private String achieveAbstractMethod(StringBuilder parent,TypeMirror typeMirror,int language){
         //typeMirror是空 或者 没有父类 就不用检查是否有抽象方法了
         log("typeMirror -- > " + typeMirror);
         if(typeMirror == null || typeMirror.getClass() == null){
@@ -615,30 +650,57 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
                 //如果是抽象方法则进行实现该方法
                 if(isAbsMethod){
                     sb.append("\n\t");
+                    if (language == MvpFastDagger.KOTLIN){
+                        sb.append("override ");
+                    }
                     for (Modifier m : methodModifier){
                         if(m != Modifier.ABSTRACT){
-                            sb.append(m.name().toLowerCase()).append(" ");
+                            if (language != MvpFastDagger.KOTLIN || m != Modifier.PUBLIC){
+                                sb.append(m.name().toLowerCase()).append(" ");
+                            }
                         }
                     }
                     ExecutableElement methodElement = (ExecutableElement)element;
                     TypeMirror returnType = methodElement.getReturnType();
-                    sb.append(returnType.getKind().isPrimitive() ? returnType.toString() : insertImportClazz(parent,importSb,returnType.toString()))
-                            .append(" ")
-                            .append(methodElement.getSimpleName())
-                            .append("(");
-                    List<? extends VariableElement> parameters = methodElement.getParameters();
-                    int v = 0;
-                    for (VariableElement variableElement : parameters){
-                        sb.append(variableElement.asType().getKind().isPrimitive()?variableElement.asType().toString() : insertImportClazz(parent,importSb,variableElement.asType().toString()))
-                                .append(" ")
-                                .append(variableElement.getSimpleName());
-                        if(v < parameters.size()-1){
-                            sb.append(",");
-                        }
-                        v++;
-                    }
-                    sb.append("){\n");
                     TypeKind kind = returnType.getKind();
+                    if (language == MvpFastDagger.KOTLIN){
+                        String returnName = kind.isPrimitive()|| kind == TypeKind.VOID ? convertKotlinBaseType(kind): (insertImportClazz(parent,importSb,returnType.toString())+"?");
+                        sb.append(" fun ")
+                                .append(methodElement.getSimpleName())
+                                .append("(");
+                        //参数设置
+                        List<? extends VariableElement> parameters = methodElement.getParameters();
+                        int v = 0;
+                        for (VariableElement variableElement : parameters){
+                            TypeKind tk = variableElement.asType().getKind();
+                            sb.append(variableElement.getSimpleName())
+                                    .append(" : ")
+                                    .append(tk.isPrimitive() || kind == TypeKind.VOID?convertKotlinBaseType(tk) : insertImportClazz(parent,importSb,variableElement.asType().toString()));
+                            if(v < parameters.size()-1){
+                                sb.append(",");
+                            }
+                            v++;
+                        }
+
+                        sb.append(String.format("):%s{\n",returnName.isEmpty()?"Unit":returnName));
+                    }else {
+                        sb.append(kind.isPrimitive() ? returnType.toString() : insertImportClazz(parent,importSb,returnType.toString()))
+                                .append(" ")
+                                .append(methodElement.getSimpleName())
+                                .append("(");
+                        List<? extends VariableElement> parameters = methodElement.getParameters();
+                        int v = 0;
+                        for (VariableElement variableElement : parameters){
+                            sb.append(variableElement.asType().getKind().isPrimitive()?variableElement.asType().toString() : insertImportClazz(parent,importSb,variableElement.asType().toString()))
+                                    .append(" ")
+                                    .append(variableElement.getSimpleName());
+                            if(v < parameters.size()-1){
+                                sb.append(",");
+                            }
+                            v++;
+                        }
+                        sb.append("){\n");
+                    }
                     if(kind != TypeKind.VOID){
                         String value = null;
                         if(kind.isPrimitive()){
@@ -646,6 +708,9 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
                                 value = "false";
                             }else if(kind == TypeKind.DOUBLE || kind == TypeKind.FLOAT){
                                 value = "0f";
+                                if (kind == TypeKind.DOUBLE && language == MvpFastDagger.KOTLIN){
+                                    value = "0.0";
+                                }
                             }else if(kind == TypeKind.LONG){
                                 value = "0L";
                             }else {
@@ -676,5 +741,39 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
             importSb.append(str);
         }
         return clazzName.substring(clazzName.lastIndexOf(".")+1);
+    }
+
+
+    /**
+     * 将java类型转换成Kotlin基本类型
+     * @param kind
+     * @return
+     */
+    private String convertKotlinBaseType(TypeKind kind){
+        String strReturnName = "";
+        if (kind != TypeKind.VOID){
+            if(kind.isPrimitive()){
+                if(kind == TypeKind.BOOLEAN){
+                    strReturnName = "Boolean";
+                }else if(kind == TypeKind.DOUBLE ){
+                    strReturnName = "Double";
+                }else if (kind == TypeKind.FLOAT){
+                    strReturnName = "Float";
+                }else if(kind == TypeKind.LONG){
+                    strReturnName = "Long";
+                }else if (kind == TypeKind.INT){
+                    strReturnName = "Int";
+                }else if (kind == TypeKind.BYTE){
+                    strReturnName = "Byte";
+                }else if (kind == TypeKind.SHORT){
+                    strReturnName = "Short";
+                }else if (kind == TypeKind.CHAR){
+                    strReturnName = "Char";
+                }
+            }
+        }else {
+            strReturnName = "Unit";
+        }
+        return strReturnName;
     }
 }

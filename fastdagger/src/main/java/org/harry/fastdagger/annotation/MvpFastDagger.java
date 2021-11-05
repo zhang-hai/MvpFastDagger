@@ -14,6 +14,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
 public @interface MvpFastDagger {
+    //支持生成的语言类型
+    int JAVA = 1;
+    int KOTLIN = 2;
+
     /**
      * 模块的功能名称，会根据这个名字生成对应的presenter 、view、model、modelImp
      * 分别存放在package .mvp下presenter model view目录
@@ -69,4 +73,6 @@ public @interface MvpFastDagger {
      */
     Class<?>[] dependencies() default {};
 
+    //设置生成的类使用的语言，默认采用JAVA
+    int language() default MvpFastDagger.JAVA;
 }

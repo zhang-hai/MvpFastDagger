@@ -50,6 +50,8 @@ public abstract class BasePresenter<M extends IModel, V extends IView> implement
 //
 //    public abstract String getNextString(String a,double b);
 //
+//    public abstract void test();
+//
 //    public abstract long getNextLong();
 //
 //    public abstract float getNextFloat();

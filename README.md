@@ -7,7 +7,7 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 
 ### MvpFastDagger使用仅需一步 ###
 
-使用该注解时，需要先创建Activity类，然后使用@MvpFastDagger。
+使用该注解时，需要先创建Activity类，然后使用@MvpFastDagger，***已支持生成Kotlin语言***。
 
 注解使用方式：
     
@@ -20,6 +20,7 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 	* scopeClazz对应的Imodel Iview的生命周期，
 	* modules对应Dagger中@Component注解中的modules字段，
 	* dependencies是对应@Component注解中的dependencies字段，该字段为可选填字段
+	* language 对应要生成的类使用的语言，支持JAVA,KOTLIN，默认Java
 	*/
 	@MvpFastDagger(name = "login",
         basePresenterClazz = BasePresenter.class,
@@ -28,7 +29,8 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
         baseModelImpClazz = BaseModel.class,
         scopeClazz = PerActivity.class,
         modules = AppModule.class,
-        dependencies = AppComponent.class)
+        dependencies = AppComponent.class
+        language = MvpFastDagger.KOTLIN)
 	public class LoginActivity extends BaseActivity<LoginPresenter> implements ILoginView {
 		
 		...
@@ -68,9 +70,15 @@ MVP+Dagger+Annotation架构中每新增一个Activity或Fragment都需要新增X
 	dependencies {
 		...
 		
-		implementation 'com.github.zhang-hai:mvpfastdagger:1.1.0'		//使用mvpfastdagger库
-    	annotationProcessor 'com.github.zhang-hai:mvpfastdagger:1.1.0'	//使用mvpfastdagger库中的注解处理器
+		implementation 'com.github.zhang-hai:mvpfastdagger:1.2.0'		//使用mvpfastdagger库
+    	annotationProcessor 'com.github.zhang-hai:mvpfastdagger:1.2.0'	//使用mvpfastdagger库中的注解处理器
 		
 	}
 
 
+### 版本更新记录 ###
+
+***V1.2.0***
+
+- 1.升级支持AndroidX，升级插件的gradle版本；
+- 2.新增`language`字段，支持生成Kotlin语言；
