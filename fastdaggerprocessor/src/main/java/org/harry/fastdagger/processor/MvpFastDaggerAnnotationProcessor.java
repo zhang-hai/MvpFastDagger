@@ -120,7 +120,7 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
         String packageName = index + ".mvp.presenter" + middleName;
         String fileFullName = packageName + "." + fileName;
         //先检查对应的presenter文件是否存在
-        if(isFileExist(fileFullName)){
+        if(isFileExist(fileFullName, fastDagger.language())){
             return;
         }
         TypeMirror typeMirror = null;
@@ -196,7 +196,7 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
         String middleName = pointIndex == -1 ? "" : "."+fastDagger.name().substring(0,pointIndex);
         String packageName = index + ".mvp."+ type.toLowerCase() + middleName;
         String fileFullName = packageName + "." + fileName;
-        if(isFileExist(fileFullName)){
+        if(isFileExist(fileFullName, fastDagger.language())){
             return;
         }
         List<? extends TypeMirror> typeMirrors = null;
@@ -256,7 +256,7 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
         String packageName = index + ".mvp.model" + middleName;
         String fileFullName = packageName + "." + fileName;
         //先检查文件是否存在
-        if(isFileExist(fileFullName)){
+        if(isFileExist(fileFullName, fastDagger.language())){
             return;
         }
         TypeMirror typeMirror = null;
@@ -536,7 +536,18 @@ public class MvpFastDaggerAnnotationProcessor extends AbstractProcessor {
      * @return
      */
     private boolean isFileExist(String filePath){
+        return isFileExist(filePath,MvpFastDagger.JAVA);
+    }
+    /**
+     * 检查要生成的文件是否存在，如果存在了就不去生成了，因为生成后会进行复制覆盖原来的文件，故需要检测文件是否存在
+     * @param filePath
+     * @return
+     */
+    private boolean isFileExist(String filePath,int language){
         filePath = filePath.replace(".","/") + ".java";
+        if (language == MvpFastDagger.KOTLIN){
+            filePath = filePath.replace(".java",".kt");
+        }
         filePath = mOptionSrc + "/" + filePath;
         File file = new File(filePath);
         return file.exists();

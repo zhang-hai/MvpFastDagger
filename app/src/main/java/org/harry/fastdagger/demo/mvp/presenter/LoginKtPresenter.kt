@@ -11,4 +11,8 @@ class LoginKtPresenter @Inject constructor(model: ILoginKtModel,view: ILoginKtVi
 	override  fun useEventBus():Boolean{
 		return false
 	}
+
+	fun test(){
+		println("测试重新编译时文件是否重新生成")
+	}
 }
