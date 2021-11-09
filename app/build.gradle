@@ -48,8 +48,8 @@ dependencies {
     implementation project(':fastdagger')
     kapt project(':fastdaggerprocessor')
 
-//    implementation 'com.github.zhang-hai:mvpfastdagger:1.1.0'
-//    annotationProcessor 'com.github.zhang-hai:mvpfastdagger:1.1.0'
+//    implementation 'com.github.zhang-hai.MvpFastDagger:fastdagger:1.2.1'
+//    kapt 'com.github.zhang-hai.MvpFastDagger:fastdagger:1.2.1'
 
     implementation 'org.androidannotations:androidannotations-api:4.4.0'
     implementation "androidx.core:core-ktx:1.6.0"
